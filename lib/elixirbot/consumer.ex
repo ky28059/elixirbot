@@ -14,6 +14,7 @@ defmodule Elixirbot.Consumer do
 
   def handle_event({:READY, data, _ws_state}) do
     Logger.info("Logged in as #{data.user.username}##{data.user.discriminator}!")
+    Api.update_status(:online, "the competition", 5)  # https://discord.com/developers/docs/game-sdk/activities#data-models-activitytype-enum
   end
 
   def handle_event({:MESSAGE_CREATE, msg, _ws_state}) do
