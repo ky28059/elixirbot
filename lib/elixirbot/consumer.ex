@@ -7,6 +7,7 @@ defmodule Elixirbot.Consumer do
   use Nostrum.Consumer
 
   alias Nostrum.Api
+  alias Nostrum.Struct.User
 
   def start_link do
     Consumer.start_link(__MODULE__)
@@ -21,6 +22,14 @@ defmodule Elixirbot.Consumer do
     case msg.content do
       "!ping" ->
         Api.create_message(msg.channel_id, "pong!")
+
+      "!pfp" ->
+        Api.create_message(
+          msg.channel_id,
+          content: User.avatar_url(msg.author),
+          message_reference: %{message_id: msg.id},
+          allowed_mentions: :none
+        )
 
       _ ->
         :ignore
