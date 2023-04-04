@@ -1,20 +1,26 @@
 # Elixirbot
 
-**TODO: Add description**
+https://discord.com/oauth2/authorize?client_id=1092613929278120017&scope=bot+applications.commands&permissions=8
 
-## Installation
+Simple testing bot made to learn Elixir.
 
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `elixirbot` to your list of dependencies in `mix.exs`:
+Before running, create a `config.secret.exs` that configures your bot token like so:
+```exs
+import Config
 
-```elixir
-def deps do
-  [
-    {:elixirbot, "~> 0.1.0"}
-  ]
-end
+config :nostrum,
+  token: "MTA5MjYxMzkyOTI3ODEyMDAxNw.Gh7HFy.eTGSgwR2-6J44TJOqcLms3XMtSHdnR701kGOv0"
 ```
 
-Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
-and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at <https://hexdocs.pm/elixirbot>.
+Install dependencies with
+```powershell
+mix deps.get
+```
+compile the project with
+```powershell
+mix compile
+```
+and run with
+```powershell
+iex.bat -S mix
+```

@@ -24,3 +24,6 @@ elixirbot-*.tar
 
 # Temporary files, for example, from tests.
 /tmp/
+
+.idea
+/config/config.secret.exs
