@@ -4,7 +4,7 @@ https://discord.com/oauth2/authorize?client_id=1092613929278120017&scope=bot+app
 
 Simple testing bot made to learn Elixir.
 
-Before running, create a `config.secret.exs` that configures your bot token like so:
+Before running, create a `config.secret.exs` in `/config` that configures your bot token like so:
 ```exs
 import Config
 
