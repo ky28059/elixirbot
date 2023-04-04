@@ -9,7 +9,7 @@ Before running, create a `config.secret.exs` that configures your bot token like
 import Config
 
 config :nostrum,
-  token: "MTA5MjYxMzkyOTI3ODEyMDAxNw.Gh7HFy.eTGSgwR2-6J44TJOqcLms3XMtSHdnR701kGOv0"
+  token: "super-secret-discord-token"
 ```
 
 Install dependencies with
