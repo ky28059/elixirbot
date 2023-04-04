@@ -9,4 +9,7 @@ config :nostrum,
     :message_content
   ]
 
+config :nosedrum,
+  prefix: "e"
+
 import_config "config.secret.exs"

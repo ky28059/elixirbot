@@ -20,7 +20,7 @@ defmodule Elixirbot.MixProject do
 
   defp deps do
     [
-      {:nostrum, "~> 0.6"}
+      {:nosedrum, "~> 0.4"}
     ]
   end
 end
