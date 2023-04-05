@@ -15,6 +15,7 @@ defmodule Elixirbot.Consumer do
 
   @global_slash_commands %{
     "ping" => Elixirbot.Commands.Ping,
+    "avatar" => Elixirbot.Commands.Avatar,
     "echo" => Elixirbot.Commands.Echo
   }
 
