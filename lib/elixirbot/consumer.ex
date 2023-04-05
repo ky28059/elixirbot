@@ -10,13 +10,15 @@ defmodule Elixirbot.Consumer do
   @commands %{
     "ping" => Elixirbot.Commands.Ping,
     "avatar" => Elixirbot.Commands.Avatar,
-    "echo" => Elixirbot.Commands.Echo
+    "echo" => Elixirbot.Commands.Echo,
+    "help" => Elixirbot.Commands.Help
   }
 
   @global_slash_commands %{
     "ping" => Elixirbot.Commands.Ping,
     "avatar" => Elixirbot.Commands.Avatar,
-    "echo" => Elixirbot.Commands.Echo
+    "echo" => Elixirbot.Commands.Echo,
+    "help" => Elixirbot.Commands.Help
   }
 
   def start_link do
@@ -27,7 +29,8 @@ defmodule Elixirbot.Consumer do
     Logger.info("Logged in as #{User.full_name(data.user)}!")
 
     # https://discord.com/developers/docs/game-sdk/activities#data-models-activitytype-enum
-    Api.update_status(:online, "the competition", 5)
+    prefix = Application.get_env(:nosedrum, :prefix)
+    Api.update_status(:online, "#{prefix}help", 2)
 
     # Add text commands to storage
     Enum.each(@commands, fn {name, command} -> CommandStorage.add_command([name], command) end)

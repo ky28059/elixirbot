@@ -19,11 +19,9 @@ defmodule Elixirbot.Commands.Avatar do
 
   @impl true
   def command(msg, _args) do
-    embed = avatar_embed(msg.author)
-
     Api.create_message(
       msg.channel_id,
-      embeds: [embed],
+      embeds: [avatar_embed(msg.author)],
       message_reference: %{message_id: msg.id},
       allowed_mentions: :none
     )
@@ -31,23 +29,30 @@ defmodule Elixirbot.Commands.Avatar do
 
   @impl true
   def command(interaction) do
-    embed = avatar_embed(interaction.user)
     [
-      embeds: [embed],
+      embeds: [avatar_embed(interaction.user)],
       allowed_mentions: []
     ]
   end
 
-  @spec avatar_embed(User) :: Embed
+  @spec avatar_embed(User.t()) :: Embed.t()
   defp avatar_embed(user) do
     # Semi-hacky workaround to get larger pfp size (not supported by nostrum as it is by discord.js)
     icon_url = User.avatar_url(user) <> "?size=4096"
 
-    %Embed{}
-      |> Embed.put_author(User.full_name(user), nil, icon_url)
-      |> Embed.put_image(icon_url)
-      |> Embed.put_color(0x6e4a7e)
-      |> Embed.put_footer("Requested by #{User.full_name(user)}", nil)
+    %Embed{
+      author: %{
+        name: User.full_name(user),
+        icon_url: icon_url
+      },
+      image: %{
+        url: icon_url
+      },
+      color: 0x6e4a7e,
+      footer: %{
+        text: "Requested by #{User.full_name(user)}"
+      }
+    }
   end
 
   @impl true
