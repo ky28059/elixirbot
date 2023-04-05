@@ -7,19 +7,30 @@ defmodule Elixirbot.Commands.Help do
   alias Nosedrum.Storage.ETS, as: CommandStorage
 
   @impl true
-  def usage, do: ["help"]
+  def usage, do: ["help [command]?"]
 
   @impl true
-  def description, do: "Returns a list of commands."
+  def description,
+    do: "Returns info about a given command, or a list of commands if no command was provided."
 
   @impl true
   def predicates, do: []
 
   @impl true
-  def command(msg, _args) do
+  def command(msg, []) do
     Api.create_message(
       msg.channel_id,
       embeds: [help_embed(msg.author)],
+      message_reference: %{message_id: msg.id},
+      allowed_mentions: :none
+    )
+  end
+
+  @impl true
+  def command(msg, [command_name]) do
+    Api.create_message(
+      msg.channel_id,
+      embeds: [help_embed(msg.author, command_name)],
       message_reference: %{message_id: msg.id},
       allowed_mentions: :none
     )
@@ -37,13 +48,48 @@ defmodule Elixirbot.Commands.Help do
       |> Enum.join(", ")
 
     %Embed{
-      title: "Commands",
+      title: "Command list",
       description: commands,
       color: 0x6e4a7e,
       footer: %{
         text: "Requested by #{User.full_name(user)}"
       }
     }
+  end
+
+  @spec help_embed(User.t(), String.t()) :: Embed.t()
+  defp help_embed(user, command_name) do
+    case CommandStorage.lookup_command(command_name) do
+      # No command found
+      nil ->
+        commands = CommandStorage.all_commands()
+          |> Map.keys()
+          |> Enum.join(", ")
+
+        %Embed{
+          title: "Command `#{command_name}` not found.",
+          description: "Available commands: #{commands}",
+          color: 0x6e4a7e,
+          footer: %{
+            text: "Requested by #{User.full_name(user)}"
+          }
+        }
+
+      # Command with no subcommands found
+      command when not is_map(command) ->
+        prefix = Application.get_env(:nosedrum, :prefix)
+        usages = Stream.map(command.usage, fn usage -> prefix <> usage end)
+          |> Enum.join("\n")
+
+        %Embed{
+          title: command_name,
+          description: "```elm\n#{usages}\n```#{command.description}",
+          color: 0x6e4a7e,
+          footer: %{
+            text: "Requested by #{User.full_name(user)}"
+          }
+        }
+    end
   end
 
   @impl true
