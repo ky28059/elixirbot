@@ -27,6 +27,11 @@ defmodule Elixirbot.Commands.Help do
   end
 
   @impl true
+  def command(msg, args) do
+    Messages.argument_arity_mismatch(msg, "help", "0-1", length args)
+  end
+
+  @impl true
   def command(interaction) do
     case interaction.data.options do
       [%{name: "command", value: command_name}] -> [embeds: [help_embed(interaction.user, command_name)]]

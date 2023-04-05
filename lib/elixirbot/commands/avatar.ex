@@ -32,8 +32,13 @@ defmodule Elixirbot.Commands.Avatar do
 
       # Error found
       {:error, _error} ->
-        Messages.reply_embed(msg, Messages.failed_to_parse_user(target))
+        Messages.failed_to_parse_user(msg, target)
     end
+  end
+
+  @impl true
+  def command(msg, args) do
+    Messages.argument_arity_mismatch(msg, "avatar", "0-1", length args)
   end
 
   @impl true
