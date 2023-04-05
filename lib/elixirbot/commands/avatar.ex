@@ -2,9 +2,9 @@ defmodule Elixirbot.Commands.Avatar do
   @behaviour Nosedrum.Command
   @behaviour Nosedrum.ApplicationCommand
 
-  alias Nostrum.Api
   alias Nostrum.Struct.{Embed, User}
   alias Nosedrum.Converters
+  alias Elixirbot.Util.Messages
 
   @impl true
   def usage, do: ["avatar @[user]?"]
@@ -20,12 +20,7 @@ defmodule Elixirbot.Commands.Avatar do
 
   @impl true
   def command(msg, []) do
-    Api.create_message(
-      msg.channel_id,
-      embeds: [avatar_embed(msg.author)],
-      message_reference: %{message_id: msg.id},
-      allowed_mentions: :none
-    )
+    Messages.reply_embed(msg, avatar_embed(msg.author))
   end
 
   @impl true
@@ -33,15 +28,11 @@ defmodule Elixirbot.Commands.Avatar do
     case Converters.to_member(target, msg.guild_id) do
       # Lookup successful
       {:ok, member} ->
-        Api.create_message(
-          msg.channel_id,
-          embeds: [avatar_embed(msg.author, member.user)],
-          message_reference: %{message_id: msg.id},
-          allowed_mentions: :none
-        )
+        Messages.reply_embed(msg, avatar_embed(msg.author, member.user))
 
       # Error found
-      {:error, _error} -> :noop  # TODO
+      {:error, _error} ->
+        Messages.reply_embed(msg, Messages.failed_to_parse_user(target))
     end
   end
 

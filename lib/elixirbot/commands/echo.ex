@@ -24,7 +24,6 @@ defmodule Elixirbot.Commands.Echo do
     Api.create_message(
       msg.channel_id,
       content: text,
-      message_reference: %{message_id: msg.id},
       allowed_mentions: :none
     )
   end
