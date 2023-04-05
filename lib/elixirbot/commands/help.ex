@@ -108,8 +108,7 @@ defmodule Elixirbot.Commands.Help do
         required: false,
         choices: CommandStorage.all_commands()
           |> Map.keys()
-          |> Stream.map(fn name -> %{name: name, value: name} end)
-          |> Enum.to_list()
+          |> Enum.map(fn name -> %{name: name, value: name} end)
       }
     ]
   end

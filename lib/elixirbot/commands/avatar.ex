@@ -4,9 +4,10 @@ defmodule Elixirbot.Commands.Avatar do
 
   alias Nostrum.Api
   alias Nostrum.Struct.{Embed, User}
+  alias Nosedrum.Converters
 
   @impl true
-  def usage, do: ["avatar"]
+  def usage, do: ["avatar @[user]?"]
 
   @impl true
   def aliases, do: ["pfp"]
@@ -18,7 +19,7 @@ defmodule Elixirbot.Commands.Avatar do
   def predicates, do: []
 
   @impl true
-  def command(msg, _args) do
+  def command(msg, []) do
     Api.create_message(
       msg.channel_id,
       embeds: [avatar_embed(msg.author)],
@@ -28,21 +29,44 @@ defmodule Elixirbot.Commands.Avatar do
   end
 
   @impl true
+  def command(msg, [target]) do
+    case Converters.to_member(target, msg.guild_id) do
+      # Lookup successful
+      {:ok, member} ->
+        Api.create_message(
+          msg.channel_id,
+          embeds: [avatar_embed(msg.author, member.user)],
+          message_reference: %{message_id: msg.id},
+          allowed_mentions: :none
+        )
+
+      # Error found
+      {:error, _error} -> :noop  # TODO
+    end
+  end
+
+  @impl true
   def command(interaction) do
+    embed = case interaction.data.options do
+      [%{name: "user", value: id}] ->
+        {:ok, target} = Nostrum.Cache.UserCache.ETS.get(id)
+        avatar_embed(interaction.user, target)
+      nil -> avatar_embed(interaction.user)
+    end
     [
-      embeds: [avatar_embed(interaction.user)],
+      embeds: [embed],
       allowed_mentions: []
     ]
   end
 
-  @spec avatar_embed(User.t()) :: Embed.t()
-  defp avatar_embed(user) do
+  @spec avatar_embed(User.t(), User.t()) :: Embed.t()
+  defp avatar_embed(user, target) do
     # Semi-hacky workaround to get larger pfp size (not supported by nostrum as it is by discord.js)
-    icon_url = User.avatar_url(user) <> "?size=4096"
+    icon_url = User.avatar_url(target) <> "?size=4096"
 
     %Embed{
       author: %{
-        name: User.full_name(user),
+        name: User.full_name(target),
         icon_url: icon_url
       },
       image: %{
@@ -55,6 +79,21 @@ defmodule Elixirbot.Commands.Avatar do
     }
   end
 
+  @spec avatar_embed(User.t()) :: Embed.t()
+  defp avatar_embed(user), do: avatar_embed(user, user)
+
   @impl true
   def type, do: :slash
+
+  @impl true
+  def options() do
+    [
+      %{
+        type: :user,
+        name: "user",
+        description: "The user to get the avatar of.",
+        required: false
+      }
+    ]
+  end
 end
