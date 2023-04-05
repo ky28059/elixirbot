@@ -1,5 +1,6 @@
 defmodule Elixirbot.Commands.Ping do
   @behaviour Nosedrum.Command
+  @behaviour Nosedrum.ApplicationCommand
 
   alias Nostrum.Api
 
@@ -7,7 +8,7 @@ defmodule Elixirbot.Commands.Ping do
   def usage, do: "ping"
 
   @impl true
-  def description, do: "Ping?"
+  def description, do: "Ping pong!"
 
   @impl true
   def predicates, do: []
@@ -16,4 +17,12 @@ defmodule Elixirbot.Commands.Ping do
   def command(msg, _args) do
     Api.create_message(msg.channel_id, "pong!")
   end
+
+  @impl true
+  def command(_interaction) do
+    [content: "pong!"]
+  end
+
+  @impl true
+  def type, do: :slash
 end

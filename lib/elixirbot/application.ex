@@ -5,9 +5,10 @@ defmodule Elixirbot.Application do
   def start(_type, _args) do
     children = [
       Nosedrum.Storage.ETS,
-      Elixirbot.Consumer
+      Elixirbot.Consumer,
+      {Nosedrum.Interactor.Dispatcher, name: Nosedrum.Interactor.Dispatcher}
     ]
-    options = [strategy: :one_for_one, name: Elixirbot.Supervisor]
+    options = [strategy: :rest_for_one, name: Elixirbot.Supervisor]
     Supervisor.start_link(children, options)
   end
 end
