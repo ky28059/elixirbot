@@ -5,7 +5,7 @@ defmodule Elixirbot.Commands.Ping do
   alias Nostrum.Api
 
   @impl true
-  def usage, do: "ping"
+  def usage, do: ["ping"]
 
   @impl true
   def description, do: "Ping pong!"

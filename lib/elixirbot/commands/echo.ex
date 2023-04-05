@@ -5,7 +5,7 @@ defmodule Elixirbot.Commands.Echo do
   alias Nostrum.Api
 
   @impl true
-  def usage, do: "echo <message>"
+  def usage, do: ["echo <message>"]
 
   @impl true
   def aliases, do: ["say"]

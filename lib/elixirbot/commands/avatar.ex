@@ -5,7 +5,7 @@ defmodule Elixirbot.Commands.Avatar do
   alias Nostrum.Struct.{Embed, User}
 
   @impl true
-  def usage, do: "avatar"
+  def usage, do: ["avatar"]
 
   @impl true
   def aliases, do: ["pfp"]
