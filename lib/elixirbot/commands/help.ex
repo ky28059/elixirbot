@@ -38,7 +38,10 @@ defmodule Elixirbot.Commands.Help do
 
   @impl true
   def command(interaction) do
-    [embeds: [help_embed(interaction.user)]]
+    case interaction.data.options do
+      [%{name: "command", value: command_name}] -> [embeds: [help_embed(interaction.user, command_name)]]
+      nil -> [embeds: [help_embed(interaction.user)]]
+    end
   end
 
   @spec help_embed(User.t()) :: Embed.t()
@@ -94,4 +97,20 @@ defmodule Elixirbot.Commands.Help do
 
   @impl true
   def type, do: :slash
+
+  @impl true
+  def options() do
+    [
+      %{
+        type: :string,
+        name: "command",
+        description: "The command to get info about.",
+        required: false,
+        choices: CommandStorage.all_commands()
+          |> Map.keys()
+          |> Stream.map(fn name -> %{name: name, value: name} end)
+          |> Enum.to_list()
+      }
+    ]
+  end
 end
