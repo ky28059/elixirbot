@@ -6,7 +6,8 @@ config :nostrum,
     :guild_messages,
     :guild_presences,
     :guild_members,
-    :message_content
+    :message_content,
+    :direct_messages
   ]
 
 config :nosedrum,
