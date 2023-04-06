@@ -9,6 +9,7 @@ defmodule Elixirbot.Handlers.Ready do
     "ping" => Elixirbot.Commands.Ping,
     "avatar" => Elixirbot.Commands.Avatar,
     "echo" => Elixirbot.Commands.Echo,
+    "kick" => Elixirbot.Commands.Kick,
     "help" => Elixirbot.Commands.Help
   }
 
@@ -17,6 +18,7 @@ defmodule Elixirbot.Handlers.Ready do
     "ping" => Elixirbot.Commands.Ping,
     "avatar" => Elixirbot.Commands.Avatar,
     "echo" => Elixirbot.Commands.Echo,
+    "kick" => Elixirbot.Commands.Kick,
     "help" => Elixirbot.Commands.Help
   }
 
